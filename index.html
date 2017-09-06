@@ -1,0 +1,85 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Vue Todos Application</title>
+		<link rel="stylesheet" href="css/style.css">
+		<script src="vue.js"></script>
+	</head>
+	<body>
+		<div class="container" id="app">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>My Todos {{todoCount}}</h1>
+      
+      <ul class="list-group" v-if="todos.length > 0">
+        <li class="list-group-item" 
+            v-bind:class="{ 'completed' : todo.completed }"
+            v-for="todo in todos | orderBy 'title' 1">
+          {{todo.title}}
+          <button class="btn btn-warning btn-xs pull-right" v-on:click="deleteTodo(todo)">Delete</button>
+          <button class="btn btn-xs pull-right margin-right-10" 
+            v-bind:class="{'btn-success' : todo.completed, 'btn-danger' : !todo.completed}"
+            v-on:click="todoCompleted(todo)">{{todo.completed ? 'Completed' : 'Pending'}}</button>
+        </li>
+      </ul>
+      
+      <div v-else><p>You don't have any Todos</p></div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-sm-12">
+      <form v-on:submit.prevent="addNewTodo(newTodo)">
+        <div class="form-group">
+          <input 
+            type="text" 
+            v-model="newTodo.title"
+            class="form-control" 
+            placeholder="Add a new Todo">
+        </div>
+        
+        <div class="form-group">
+          <button class="btn btn-success">Add Todo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+		<script>
+			new Vue({
+	el: '#app',
+  
+  data: {
+  	todos: [{id: 1, title: 'Go Shopping', completed: true}],
+    newTodo: {id: null, title: '', completed: false}
+  },
+  
+  computed: {
+  	todoCount() {
+    	return this.todos.length
+    }
+  },
+  
+  methods: {
+  	addNewTodo(newTodo) {
+    	this.todos.push(newTodo)
+      this.newTodo = {id: null, title: '', completed: false}
+    },
+    
+    deleteTodo(todo) {
+      this.todos.$remove(todo)
+    },
+    
+    todoCompleted(todo) {
+    	todo.completed = !todo.completed
+    }
+  }
+});
+		</script>
+
+				<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	</body>
+</html>
